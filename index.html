@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blueprint Flooring Estimator</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 16px; }
+    h1 { margin: 0 0 8px; }
+    .hint { color: #555; margin: 8px 0 14px; line-height: 1.35; }
+
+    .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+    .left { flex: 2; min-width: 360px; }
+    .right { flex: 1; min-width: 300px; }
+
+    canvas { border: 1px solid #ccc; width: 100%; height: auto; cursor: crosshair; }
+    .card { border: 1px solid #ddd; background: #fafafa; padding: 12px; border-radius: 8px; }
+
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+    button, select { padding: 8px 10px; cursor: pointer; }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .status { margin-top: 10px; padding: 10px; background: #f7f7f7; border: 1px solid #ddd; border-radius: 8px; }
+
+    .totals { display: grid; gap: 8px; margin-top: 10px; }
+    .totals .big { font-size: 1.2rem; font-weight: 700; }
+
+    .list { margin-top: 10px; max-height: 420px; overflow: auto; background: #fff; border: 1px solid #ddd; border-radius: 8px; }
+    .list-item { padding: 10px; border-bottom: 1px solid #eee; }
+    .list-item:last-child { border-bottom: none; }
+    .list-item b { display: block; margin-bottom: 4px; }
+    .small { color: #666; font-size: 0.92rem; }
+  </style>
+</head>
+<body>
+  <h1>Blueprint Flooring Estimator (Rect / Circle / Triangle)</h1>
+  <div class="hint">
+    1) Upload a blueprint image (PNG/JPG).<br/>
+    2) Choose a shape mode: <b>Rectangle</b> (drag), <b>Circle</b> (drag radius), <b>Triangle</b> (click 3 points).<br/>
+    3) Enter the real measurements in <b>feet</b>. Each measurement saves to the list + total.
+  </div>
+
+  <div class="row">
+    <div class="left">
+      <div class="card">
+        <div>
+          <input id="fileInput" type="file" accept="image/*" />
+        </div>
+
+        <div class="controls">
+          <label for="shapeMode"><b>Shape:</b></label>
+          <select id="shapeMode">
+            <option value="rect" selected>Rectangle (drag)</option>
+            <option value="circle">Circle (drag)</option>
+            <option value="tri">Triangle (3 clicks)</option>
+          </select>
+
+          <button id="btnUndo" disabled>Undo Last</button>
+          <button id="btnClear" disabled>Clear All</button>
+        </div>
+
+        <div class="status" id="status">Status: Upload an image to begin.</div>
+
+        <div style="margin-top: 12px;">
+          <canvas id="canvas" width="1000" height="720"></canvas>
+        </div>
+
+        <div class="small" style="margin-top:10px;">
+          Triangle tip: click 3 corners, then you’ll be asked for real base + height (ft).
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="card">
+        <div class="totals">
+          <div class="big">Total: <span id="totalOut">0.00</span> sq ft</div>
+          <div class="small">Selections saved: <span id="countOut">0</span></div>
+        </div>
+
+        <div class="list" id="list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
